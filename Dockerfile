@@ -425,6 +425,21 @@ RUN cd                           openssl              \
  && git clean -fdx                                    \
  && git clean -fdx                                    \
  && cd ..
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
+ && git clone --depth=1 --recursive  \
+    https://github.com/GNOME/glib
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
+RUN cd                           glib                 \
+ && meson _build \
+ && ninja -C _build \
+ && ninja -C _build install \
+ && git reset --hard \
+ && git clean -fdx \
+ && git clean -fdx \
+ && cd ..
 
 RUN for k in $(seq 5) ; do                                               \
       sleep 91                                                           \
