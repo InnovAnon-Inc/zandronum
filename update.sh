@@ -20,7 +20,7 @@ for k in $(seq 7) ; do
     sleep 91
   done
   xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip \
-                    python3-pillow-simd || continue
+                    python3-pillow-simd gtk+-devel || continue
   FLAG=1
   break
 done
