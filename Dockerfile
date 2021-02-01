@@ -318,7 +318,7 @@ RUN cd                          freedoom      \
 RUN for k in $(seq 5) ; do                                               \
       sleep 91                                                           \
  && git clone --depth=1 --recursive  \
-    https://github.com/GNOME/glib
+    https://github.com/GNOME/glib.git \
    && break                                                              \
    || (( k != 5 ))                                                       \
   ; done
