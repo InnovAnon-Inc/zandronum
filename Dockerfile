@@ -278,6 +278,26 @@ RUN cd                          freedoom      \
 
 RUN sleep 91                                  \
  && git clone --depth=1 --recursive           \
+      https://github.com/FluidSynth/fluidsynth.git
+RUN cd fluidsynth                             \
+ && mkdir -v build                            \
+ && cd       build                            \
+ && cmake                                     \
+      -DCMAKE_BUILD_TYPE=Release         \
+      -DCMAKE_C_FLAGS="$CFLAGS"          \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS"      \
+      -DCMAKE_FIND_ROOT_PATH=$PREFIX     \
+      -DCMAKE_INSTALL_PREFIX=$PREFIX     \
+      ..                                      \
+ && make                                      \
+ && make install                              \
+ && cd ..                                     \
+ && git reset --hard                          \
+ && git clean -fdx                            \
+ && git clean -fdx                            \
+ && cd ..
+RUN sleep 91                                  \
+ && git clone --depth=1 --recursive           \
       https://github.com/doomtech/zandronum.git
 RUN cd                          zandronum     \
  && mkdir -v build                            \
