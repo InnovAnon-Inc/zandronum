@@ -64,8 +64,12 @@ ENV  LDFLAGS="-fipa-profile -fprofile-reorder-functions -fvpt $LDFLAGS"
 # Debug
 ENV CPPFLAGS="-DNDEBUG $CPPFLAGS"
 
-RUN sleep 91                          \
- && git clone --depth=1 --recursive https://github.com/madler/zlib.git
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
+   && git clone --depth=1 --recursive https://github.com/madler/zlib.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 RUN cd zlib                           \
  && ./configure --prefix=$PREFIX      \
       --const --static --64           \
@@ -76,8 +80,9 @@ RUN cd zlib                           \
  && git clean -fdx                    \
  && cd ..                             \
  && ldconfig
+
 RUN sleep 91                          \
- && curl --proxy $SOCKS_PROXY -o bzip2.tgz -L             \
+ && curl --retry 5 --proxy $SOCKS_PROXY -o bzip2.tgz -L             \
   https://sourceforge.net/projects/bzip2/files/latest/download
 RUN tar xf bzip2.tgz                  \
  && cd bzip2-*                        \
@@ -86,9 +91,14 @@ RUN tar xf bzip2.tgz                  \
  && cd ..                             \
  && rm -rf bzip2-*/                   \
  && ldconfig
-RUN sleep 91 \
+
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
  && git clone --depth=1 --recursive     \
-      https://github.com/xz-mirror/xz.git
+      https://github.com/xz-mirror/xz.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 RUN cd                           xz     \
  && ./autogen.sh                        \
  && ./configure --help                  \
@@ -120,8 +130,13 @@ RUN cd                           xz     \
  && git clean -fdx                      \
  && cd ..                               \
  && ldconfig
-RUN sleep 91                          \
- && git clone --depth=1 --recursive https://github.com/glennrp/libpng.git
+
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
+ && git clone --depth=1 --recursive https://github.com/glennrp/libpng.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 # TODO
 RUN cd libpng                         \
  && autoreconf -fi                    \
@@ -156,8 +171,13 @@ RUN cd libpng                         \
  && git clean -fdx                    \
  && cd ..                             \
  && ldconfig
-RUN sleep 91                             \
- && git clone --depth=1 --recursive https://github.com/libjpeg-turbo/libjpeg-turbo.git
+
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
+ && git clone --depth=1 --recursive https://github.com/libjpeg-turbo/libjpeg-turbo.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 RUN cd libjpeg-turbo                     \
  && mkdir -v build                       \
  && cd       build                       \
@@ -176,9 +196,14 @@ RUN cd libjpeg-turbo                     \
  && git clean -fdx                       \
  && cd ..                                \
  && ldconfig
-RUN sleep 91                              \
+
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
  && git clone --depth=1 --recursive       \
-      https://github.com/SDL-mirror/SDL.git
+      https://github.com/SDL-mirror/SDL.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 RUN cd                            SDL     \
  && ./autogen.sh                          \
  && ./configure --help                    \
@@ -211,9 +236,13 @@ RUN cd                            SDL     \
  && cd ..                                 \
  && ldconfig
 
-RUN sleep 91                                 \
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
  && git clone --depth=1 --recursive          \
-      https://github.com/Doom-Utils/deutex.git
+      https://github.com/Doom-Utils/deutex.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 # TODO
 RUN cd                            deutex     \ 
  && chmod -v +x bootstrap                    \
@@ -249,9 +278,14 @@ RUN cd                            deutex     \
  && git clean -fdx                           \
  && cd ..                                    \
  && ldconfig
-RUN sleep 91                                  \
+
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
  && git clone --depth=1 --recursive           \
-      https://github.com/Doom-Utils/zennode.git
+      https://github.com/Doom-Utils/zennode.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 RUN cd                            zennode     \
  && sed -i                                    \
  -e 's/^DOCS=.*/DOCS=/'                       \
@@ -265,9 +299,14 @@ RUN cd                            zennode     \
  && git clean -fdx                            \
  && cd ..                                     \
  && ldconfig
-RUN sleep 91                                  \
+
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
  && git clone --depth=1 --recursive           \
-      https://github.com/freedoom/freedoom.git
+      https://github.com/freedoom/freedoom.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 RUN cd                          freedoom      \
  && make                                      \
  && install -vD wads/* -t /var/games/doom     \
@@ -276,9 +315,13 @@ RUN cd                          freedoom      \
  && git clean -fdx                            \
  && cd ..
 
-RUN sleep 91                                  \
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
  && git clone --depth=1 --recursive           \
-      https://github.com/FluidSynth/fluidsynth.git
+      https://github.com/FluidSynth/fluidsynth.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 RUN cd fluidsynth                             \
  && mkdir -v build                            \
  && cd       build                            \
@@ -296,6 +339,7 @@ RUN cd fluidsynth                             \
  && git clean -fdx                            \
  && git clean -fdx                            \
  && cd ..
+
 #	no-afalgeng                                   \
 #        no-async                                      \
 #        no-autoalginit                                \
@@ -323,10 +367,14 @@ RUN cd fluidsynth                             \
 #	no-dynamic-engine                             \
 #        no-egd                                        \
 #        no-err                                        \
-RUN sleep 91                                          \
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
  && git clone --depth=1 --recursive -b OpenSSL_1_1_1i \
       https://github.com/openssl/openssl.git          \
- && cd                           openssl              \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
+RUN cd                           openssl              \
  && ./Configure --prefix=$PREFIX                      \
 	no-gost                                       \
 	no-heartbeats                                 \
@@ -377,9 +425,14 @@ RUN sleep 91                                          \
  && git clean -fdx                                    \
  && git clean -fdx                                    \
  && cd ..
-RUN sleep 91                                  \
+
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
  && git clone --depth=1 --recursive           \
-      https://github.com/doomtech/zandronum.git
+      https://github.com/doomtech/zandronum.git \
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
 RUN cd                          zandronum     \
  && mkdir -v build                            \
  && cd       build                            \
