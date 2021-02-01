@@ -270,7 +270,7 @@ RUN sleep 91                                  \
       https://github.com/freedoom/freedoom.git
 RUN cd                          freedoom      \
  && make                                      \
- && install -vD wads /var/games/doom/          \
+ && install -vt /var/games/doom/ wads/*       \
  && git reset --hard                          \
  && git clean -fdx                            \
  && git clean -fdx                            \
