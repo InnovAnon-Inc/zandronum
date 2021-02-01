@@ -3,7 +3,7 @@ FROM innovanon/void-base as builder
 RUN sleep 91 \
  && xbps-install -Suy
 RUN sleep 91 \
- && xbps-install   -y gettext gettext-devel gettext-libs gperf po4a texinfo zip
+ && xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip
 
 ARG CPPFLAGS
 ARG   CFLAGS
