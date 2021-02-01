@@ -109,8 +109,10 @@ RUN cd                           xz     \
  && ldconfig
 RUN sleep 91                          \
  && git clone --depth=1 --recursive https://github.com/glennrp/libpng.git
+# TODO
 RUN cd libpng                         \
  && autoreconf -fi                    \
+ && ./configure --help                \
  && ./configure --prefix=$PREFIX      \
       --enable-static                 \
       --disable-shared                \
@@ -133,6 +135,7 @@ RUN cd libpng                         \
         AR="$AR"                             \
         RANLIB="$RANLIB"                     \
         STRIP="$STRIP"                       \
+        LIBS=-lz \
  && make                              \
  && make install                      \
  && git reset --hard                  \
@@ -165,7 +168,7 @@ RUN sleep 91                              \
       https://github.com/SDL-mirror/SDL.git
 RUN cd                            SDL     \
  && ./autogen.sh                          \
- && ./configure                           \
+ && ./configure --prefix=$PREFIX          \
       --disable-shared --enable-static    \
 	CPPFLAGS="$CPPFLAGS"                 \
 	CXXFLAGS="$CXXFLAGS"                 \
@@ -197,10 +200,12 @@ RUN cd                            SDL     \
 RUN sleep 91                                 \
  && git clone --depth=1 --recursive          \
       https://github.com/Doom-Utils/deutex.git
+# TODO
 RUN cd                            deutex     \ 
  && chmod -v +x bootstrap                    \
  && ./bootstrap                              \
- && ./configure                              \
+ && ./configure --help                       \
+ && ./configure --prefix=$PREFIX             \
       --disable-shared --enable-static       \
 	CPPFLAGS="$CPPFLAGS"                 \
 	CXXFLAGS="$CXXFLAGS"                 \
@@ -277,6 +282,18 @@ RUN cd                          zandronum     \
  && git clean -fdx                            \
  && git clean -fdx                            \
  && cd ..
+
+COPY    ./rainbow_blood.zip ./
+RUN unzip        rainbow_blood.zip   \
+ && mkdir -v     rainbow_blood       \
+ && cd           rainbow_blood       \
+ && unzip -o '../rainbow blood.pk3'  \
+ && rm -v     ../rainbow_blood.zip   \
+             '../rainbow blood.pk3'  \
+ && zip -q -Z bzip2 -9               \
+         -r /var/games/doom/rainbow_blood.pk3 . \
+ && cd      /tmp                     \
+ && rm -rf                  ./rainbow_blood
 
 # TODO
 # && useradd -ms /bin/bash zandronum
