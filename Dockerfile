@@ -14,9 +14,8 @@ FROM innovanon/void-base as builder
 #    ; exit 0                                                                                 \
 #  ; done                                                                                     \
 # && exit 2
-RUN sleep 91             \
- && xbps-install -Suy    \
- && xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip
+COPY ./update.sh ./
+RUN  ./update.sh
 
 ARG CPPFLAGS
 ARG   CFLAGS
