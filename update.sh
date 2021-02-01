@@ -19,7 +19,8 @@ for k in $(seq 7) ; do
   for K in $(seq $((2 ** k))) ; do
     sleep 91
   done
-  xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip || continue
+  xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip \
+                    python3-pillow-simd || continue
   FLAG=1
   break
 done
