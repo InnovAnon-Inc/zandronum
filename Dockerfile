@@ -1,4 +1,4 @@
-FROM innovanon/void-base as builder
+FROM innovanon/void-base-pgo as builder
 
 #RUN for k in $(seq 3) ; do \
 #      sleep 91             \
@@ -22,14 +22,24 @@ ARG   CFLAGS
 ARG CXXFLAGS
 ARG  LDFLAGS
 
-ENV CHOST=x86_64-linux-musl
+#ENV CHOST=x86_64-linux-musl
+#ENV CC=$CHOST-gcc
+#ENV CXX=$CHOST-g++
+#ENV FC=$CHOST-gfortran
+#ENV NM=$CC-nm
+#ENV AR=$CC-ar
+#ENV RANLIB=$CC-ranlib
+#ENV STRIP=$CHOST-strip
+ENV CHOST=x86_64-unknown-linux-gnu
 ENV CC=$CHOST-gcc
 ENV CXX=$CHOST-g++
-ENV FC=$CHOST-gfortran
+#ENV FC=$CHOST-gfortran
 ENV NM=$CC-nm
 ENV AR=$CC-ar
 ENV RANLIB=$CC-ranlib
 ENV STRIP=$CHOST-strip
+ENV LD=$CHOST-ld
+ENV AS=$CHOST-as
 
 ENV CPPFLAGS="$CPPFLAGS"
 ENV   CFLAGS="$CFLAGS"
@@ -121,6 +131,7 @@ RUN cd                           xz     \
         FC="$FC"                             \
         NM="$NM"                             \
         AR="$AR"                             \
+        LD="$LD" AS="$AS" \
         RANLIB="$RANLIB"                     \
         STRIP="$STRIP"                       \
  && make                                \
@@ -162,6 +173,7 @@ RUN cd libpng                         \
         FC="$FC"                             \
         NM="$NM"                             \
         AR="$AR"                             \
+        LD="$LD" AS="$AS" \
         RANLIB="$RANLIB"                     \
         STRIP="$STRIP"                       \
  && make                              \
@@ -226,6 +238,7 @@ RUN cd                            SDL     \
         FC="$FC"                             \
         NM="$NM"                             \
         AR="$AR"                             \
+        LD="$LD" AS="$AS" \
         RANLIB="$RANLIB"                     \
         STRIP="$STRIP"                       \
  && make                                  \
@@ -268,6 +281,7 @@ RUN cd                            deutex     \
         FC="$FC"                             \
         NM="$NM"                             \
         AR="$AR"                             \
+        LD="$LD" AS="$AS" \
         RANLIB="$RANLIB"                     \
         STRIP="$STRIP"                       \
         LIBS='-lz -lpng'                     \
@@ -405,6 +419,18 @@ RUN cd                           openssl              \
  && git clean -fdx                                    \
  && git clean -fdx                                    \
  && cd .. \
+ && ldconfig
+
+COPY ./fmodstudioapi20107linux.tar.gz /tmp/
+RUN tar xf /tmp/fmodstudioapi20107linux.tar.gz                      \
+ && cp -v  /tmp/fmodstudioapi20107linux/api/fsbank/lib/x86_64/*so   \
+           /tmp/fmodstudioapi20107linux/api/lowlevel/lib/x86_64/*so \
+           /tmp/fmodstudioapi20107linux/api/studio/lib/x86_64/*so   $PREFIX/lib/ \
+ && cp -v  /tmp/fmodstudioapi20107linux/api/fsbank/inc/*.h          \
+           /tmp/fmodstudioapi20107linux/api/lowlevel/inc/*.h        \
+           /tmp/fmodstudioapi20107linux/api/studio/inc/*.h          $PREFIX/include/ \
+ && rm -rf /tmp/fmodstudioapi20107linux                             \
+ && rm -v  /tmp/fmodstudioapi20107linux.tar.gz                      \
  && ldconfig
 
 RUN for k in $(seq 5) ; do                                               \
