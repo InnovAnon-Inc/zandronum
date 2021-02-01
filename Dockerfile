@@ -70,10 +70,8 @@ RUN tar xf bzip2.tgz                  \
  && cd bzip2-*                        \
  && make                              \
  && make install                      \
- && git reset --hard                  \
- && git clean -fdx                    \
- && git clean -fdx                    \
- && cd ..
+ && cd ..                             \
+ && rm -rf bzip2-*/
 RUN sleep 91 \
  && git clone --depth=1 --recursive     \
       https://github.com/xz-mirror/xz.git
@@ -192,4 +190,22 @@ RUN cd                          zandronum     \
 
 # TODO
 # && useradd -ms /bin/bash zandronum
+
+# TODO -nightly ?
+COPY --from=innovanon/abaddon /root/oblige/wads/* /var/games/doom/
+
+FROM scratch as squash
+COPY --from=builder / /
+RUN chown -R tor:tor /var/lib/tor
+SHELL ["/bin/bash", "-l", "-c"]
+
+FROM squash as test
+RUN sleep 91                        \
+ && tor --verify-config             \
+ && xbps-install -S
+
+FROM squash as final
+WORKDIR /root/
+ENTRYPOINT ["/usr/local/bin/zandronum"]
+#CMD        ["--batch", "latest.wad"]
 
