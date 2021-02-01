@@ -1,0 +1,67 @@
+version: 2.1 # use CircleCI 2.0
+
+orbs:
+  deepcode: arrai/deepcode@1.1.0
+  jira: circleci/jira@1.0.5
+  slack: circleci/slack@4.2.0
+
+workflows:
+  my-workflow:
+    jobs:
+      - build:
+          context:
+            - default
+          #post-steps:
+          #  - jira/notify
+
+jobs:
+  build:
+    working_directory: /app
+    docker:
+      - image: docker:latest
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      #- run: git submodule sync
+      #- run: git submodule update --init
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              make openssl tar gzip curl jq
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build \
+              --cache-from=zandronum \
+              -t innovanon/zandronum \
+              --build-arg TEST=1 .
+      - deploy:
+          name: Push application Docker image
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              #docker tag lfs-builder "InnovAnon-Inc/lfs-builder:${CIRCLE_SHA1}"
+              #docker push           "InnovAnon-Inc/lfs-builder:${CIRCLE_SHA1}"
+              docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+              docker push innovanon/zandronum
+            fi
+      - run:
+          name: Push upstream (zclient)
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              curl --location --request POST \
+                'https://circleci.com/api/v2/project/github/InnovAnon-Inc/zclient/pipeline' \
+                --header 'Content-Type: application/json' \
+                -u "${API_TOKEN}:"
+            fi
+      - slack/notify:
+          event: fail
+          mentions: '@InnovAnon-Inc'
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+
