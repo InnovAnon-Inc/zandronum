@@ -241,6 +241,7 @@ RUN cd                            deutex     \
         AR="$AR"                             \
         RANLIB="$RANLIB"                     \
         STRIP="$STRIP"                       \
+        LIBS='-lz -lpng'                     \
  && make                                     \
  && make install                             \
  && git reset --hard                         \
