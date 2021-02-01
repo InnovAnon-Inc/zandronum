@@ -62,16 +62,18 @@ RUN cd zlib                           \
  && git reset --hard                  \
  && git clean -fdx                    \
  && git clean -fdx                    \
- && cd ..
+ && cd ..                             \
+ && ldconfig
 RUN sleep 91                          \
  && curl --proxy $SOCKS_PROXY -o bzip2.tgz -L             \
   https://sourceforge.net/projects/bzip2/files/latest/download
 RUN tar xf bzip2.tgz                  \
  && cd bzip2-*                        \
  && make                              \
- && make install                      \
+ && make PREFIX=$PREFIX install       \
  && cd ..                             \
- && rm -rf bzip2-*/
+ && rm -rf bzip2-*/                   \
+ && ldconfig
 RUN sleep 91 \
  && git clone --depth=1 --recursive     \
       https://github.com/xz-mirror/xz.git
@@ -79,12 +81,32 @@ RUN cd                           xz     \
  && ./autogen.sh                        \
  && ./configure --prefix=$PREFIX        \
       --disable-shared --enable-static  \
+	CPPFLAGS="$CPPFLAGS"                 \
+	CXXFLAGS="$CXXFLAGS"                 \
+	CFLAGS="$CFLAGS"                     \
+	LDFLAGS="$LDFLAGS"                   \
+        CPATH="$CPATH"                                \
+        C_INCLUDE_PATH="$C_INCLUDE_PATH"              \
+        OBJC_INCLUDE_PATH="$OBJC_INCLUDE_PATH"        \
+        LIBRARY_PATH="$LIBRARY_PATH"                  \
+        LD_LIBRARY_PATH="$LD_LIBRARY_PATH"            \
+        LD_RUN_PATH="$LD_RUN_PATH"                    \
+        PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
+        PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
+        CC="$CC"                             \
+        CXX="$CXX"                           \
+        FC="$FC"                             \
+        NM="$NM"                             \
+        AR="$AR"                             \
+        RANLIB="$RANLIB"                     \
+        STRIP="$STRIP"                       \
  && make                                \
  && make install                        \
  && git reset --hard                    \
  && git clean -fdx                      \
  && git clean -fdx                      \
- && cd ..
+ && cd ..                               \
+ && ldconfig
 RUN sleep 91                          \
  && git clone --depth=1 --recursive https://github.com/glennrp/libpng.git
 RUN cd libpng                         \
@@ -92,12 +114,32 @@ RUN cd libpng                         \
  && ./configure --prefix=$PREFIX      \
       --enable-static                 \
       --disable-shared                \
+	CPPFLAGS="$CPPFLAGS"                 \
+	CXXFLAGS="$CXXFLAGS"                 \
+	CFLAGS="$CFLAGS"                     \
+	LDFLAGS="$LDFLAGS"                   \
+        CPATH="$CPATH"                                \
+        C_INCLUDE_PATH="$C_INCLUDE_PATH"              \
+        OBJC_INCLUDE_PATH="$OBJC_INCLUDE_PATH"        \
+        LIBRARY_PATH="$LIBRARY_PATH"                  \
+        LD_LIBRARY_PATH="$LD_LIBRARY_PATH"            \
+        LD_RUN_PATH="$LD_RUN_PATH"                    \
+        PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
+        PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
+        CC="$CC"                             \
+        CXX="$CXX"                           \
+        FC="$FC"                             \
+        NM="$NM"                             \
+        AR="$AR"                             \
+        RANLIB="$RANLIB"                     \
+        STRIP="$STRIP"                       \
  && make                              \
  && make install                      \
  && git reset --hard                  \
  && git clean -fdx                    \
  && git clean -fdx                    \
- && cd ..
+ && cd ..                             \
+ && ldconfig
 RUN sleep 91                             \
  && git clone --depth=1 --recursive https://github.com/libjpeg-turbo/libjpeg-turbo.git
 RUN cd libjpeg-turbo                     \
@@ -116,7 +158,8 @@ RUN cd libjpeg-turbo                     \
  && git reset --hard                     \
  && git clean -fdx                       \
  && git clean -fdx                       \
- && cd ..
+ && cd ..                                \
+ && ldconfig
 RUN sleep 91                              \
  && git clone --depth=1 --recursive       \
       https://github.com/SDL-mirror/SDL.git
@@ -124,12 +167,32 @@ RUN cd                            SDL     \
  && ./autogen.sh                          \
  && ./configure                           \
       --disable-shared --enable-static    \
+	CPPFLAGS="$CPPFLAGS"                 \
+	CXXFLAGS="$CXXFLAGS"                 \
+	CFLAGS="$CFLAGS"                     \
+	LDFLAGS="$LDFLAGS"                   \
+        CPATH="$CPATH"                                \
+        C_INCLUDE_PATH="$C_INCLUDE_PATH"              \
+        OBJC_INCLUDE_PATH="$OBJC_INCLUDE_PATH"        \
+        LIBRARY_PATH="$LIBRARY_PATH"                  \
+        LD_LIBRARY_PATH="$LD_LIBRARY_PATH"            \
+        LD_RUN_PATH="$LD_RUN_PATH"                    \
+        PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
+        PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
+        CC="$CC"                             \
+        CXX="$CXX"                           \
+        FC="$FC"                             \
+        NM="$NM"                             \
+        AR="$AR"                             \
+        RANLIB="$RANLIB"                     \
+        STRIP="$STRIP"                       \
  && make                                  \
  && make install                          \
  && git reset --hard                      \
  && git clean -fdx                        \
  && git clean -fdx                        \
- && cd ..
+ && cd ..                                 \
+ && ldconfig
 
 RUN sleep 91                                 \
  && git clone --depth=1 --recursive          \
@@ -139,12 +202,32 @@ RUN cd                            deutex     \
  && ./bootstrap                              \
  && ./configure                              \
       --disable-shared --enable-static       \
+	CPPFLAGS="$CPPFLAGS"                 \
+	CXXFLAGS="$CXXFLAGS"                 \
+	CFLAGS="$CFLAGS"                     \
+	LDFLAGS="$LDFLAGS"                   \
+        CPATH="$CPATH"                                \
+        C_INCLUDE_PATH="$C_INCLUDE_PATH"              \
+        OBJC_INCLUDE_PATH="$OBJC_INCLUDE_PATH"        \
+        LIBRARY_PATH="$LIBRARY_PATH"                  \
+        LD_LIBRARY_PATH="$LD_LIBRARY_PATH"            \
+        LD_RUN_PATH="$LD_RUN_PATH"                    \
+        PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
+        PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
+        CC="$CC"                             \
+        CXX="$CXX"                           \
+        FC="$FC"                             \
+        NM="$NM"                             \
+        AR="$AR"                             \
+        RANLIB="$RANLIB"                     \
+        STRIP="$STRIP"                       \
  && make                                     \
  && make install                             \
  && git reset --hard                         \
  && git clean -fdx                           \
  && git clean -fdx                           \
- && cd ..
+ && cd ..                                    \
+ && ldconfig
 RUN sleep 91                                  \
  && git clone --depth=1 --recursive           \
       https://github.com/Doom-Utils/zennode.git
@@ -155,11 +238,12 @@ RUN cd                            zennode     \
  -e '/	for doc in $(DOCS)/d'                 \
  Makefile                                     \
  && make                                      \
- && make install                              \
+ && make PREFIX=$PREFIX install               \
  && git reset --hard                          \
  && git clean -fdx                            \
  && git clean -fdx                            \
- && cd ..
+ && cd ..                                     \
+ && ldconfig
 RUN sleep 91                                  \
  && git clone --depth=1 --recursive           \
       https://github.com/freedoom/freedoom.git
@@ -177,9 +261,15 @@ RUN sleep 91                                  \
 RUN cd                          zandronum     \
  && mkdir -v build                            \
  && cd       build                            \
- && cmake .. -DCMAKE_BUILD_TYPE=Release       \
+ && cmake                                     \
+      -DCMAKE_BUILD_TYPE=Release         \
+      -DCMAKE_C_FLAGS="$CFLAGS"          \
+      -DCMAKE_CXX_FLAGS="$CXXFLAGS"      \
+      -DCMAKE_FIND_ROOT_PATH=$PREFIX     \
+      -DCMAKE_INSTALL_PREFIX=$PREFIX     \
       -DSDL_LIBRARY=$PREFIX                   \
       -DSDL_INCLUDE_DIR=$PREFIX/include       \
+      ..                                      \
  && make                                      \
  && make install                              \
  && cd ..                                     \
