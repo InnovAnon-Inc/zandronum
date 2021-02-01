@@ -317,6 +317,22 @@ RUN cd                          freedoom      \
 
 RUN for k in $(seq 5) ; do                                               \
       sleep 91                                                           \
+ && git clone --depth=1 --recursive  \
+    https://github.com/GNOME/glib
+   && break                                                              \
+   || (( k != 5 ))                                                       \
+  ; done
+RUN cd                           glib                 \
+ && meson _build \
+ && ninja -C _build \
+ && ninja -C _build install \
+ && git reset --hard \
+ && git clean -fdx \
+ && git clean -fdx \
+ && cd .. \
+ && ldconfig || :
+RUN for k in $(seq 5) ; do                                               \
+      sleep 91                                                           \
  && git clone --depth=1 --recursive           \
       https://github.com/FluidSynth/fluidsynth.git \
    && break                                                              \
@@ -338,7 +354,8 @@ RUN cd fluidsynth                             \
  && git reset --hard                          \
  && git clean -fdx                            \
  && git clean -fdx                            \
- && cd ..
+ && cd .. \
+ && ldconfig || :
 
 #	no-afalgeng                                   \
 #        no-async                                      \
@@ -376,44 +393,7 @@ RUN for k in $(seq 5) ; do                                               \
   ; done
 RUN cd                           openssl              \
  && ./Configure --prefix=$PREFIX                      \
-	no-gost                                       \
-	no-heartbeats                                 \
-        no-hw                                         \
-        no-hw-padlock                                 \
-        no-idea                                       \
-        no-md2                                        \
-        no-md4                                        \
-	no-mdc2                                       \
-        no-multiblock                                 \
-	no-nextprotoneg                               \
-        no-ocb                                        \
-        no-ocsp                                       \
-	no-poly1305                                   \
-	no-posix-io                                   \
-        no-psk                                        \
-        no-rc2                                        \
-	no-rc4                                        \
-        no-rc5                                        \
-        no-rdrand                                     \
-        no-rfc3779                                    \
-	no-rmd160                                     \
-	no-scrypt                                     \
-        no-sctp                                       \
-        no-seed                                       \
-        no-srp                                        \
-        no-srtp                                       \
-        no-ssl-trace                                  \
-        no-ssl2                                       \
-	no-ssl3                                       \
-	no-ssl3-method                                \
-        no-tls                                        \
-	no-tls1                                       \
-        no-tls1-method                                \
-        no-ts                                         \
-        no-ui                                         \
-	no-unit-test                                  \
 	no-weak-ssl-ciphers                           \
-        no-whirlpool                                  \
         threads no-shared zlib                        \
 	-static                                       \
         -DOPENSSL_SMALL_FOOTPRINT                     \
@@ -424,22 +404,8 @@ RUN cd                           openssl              \
  && git reset --hard                                  \
  && git clean -fdx                                    \
  && git clean -fdx                                    \
- && cd ..
-RUN for k in $(seq 5) ; do                                               \
-      sleep 91                                                           \
- && git clone --depth=1 --recursive  \
-    https://github.com/GNOME/glib
-   && break                                                              \
-   || (( k != 5 ))                                                       \
-  ; done
-RUN cd                           glib                 \
- && meson _build \
- && ninja -C _build \
- && ninja -C _build install \
- && git reset --hard \
- && git clean -fdx \
- && git clean -fdx \
- && cd ..
+ && cd .. \
+ && ldconfig
 
 RUN for k in $(seq 5) ; do                                               \
       sleep 91                                                           \
