@@ -1,19 +1,22 @@
 FROM innovanon/void-base as builder
 
-RUN for k in $(seq 3) ; do \
-      sleep 91             \
-   && xbps-install -Suy    \
-   || continue             \
-    ; exit 0               \
-   ; done                  \
- && exit 2
-RUN for k in $(seq 3) ; do                                                                   \
-      sleep 91                                                                               \
-   && xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip \
-   || continue                                                                               \
-    ; exit 0                                                                                 \
-  ; done                                                                                     \
- && exit 2
+#RUN for k in $(seq 3) ; do \
+#      sleep 91             \
+#   && xbps-install -Suy    \
+#   || continue             \
+#    ; exit 0               \
+#   ; done                  \
+# && exit 2
+#RUN for k in $(seq 3) ; do                                                                   \
+#      sleep 91                                                                               \
+#   && xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip \
+#   || continue                                                                               \
+#    ; exit 0                                                                                 \
+#  ; done                                                                                     \
+# && exit 2
+RUN sleep 91             \
+ && xbps-install -Suy    \
+ && xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip
 
 ARG CPPFLAGS
 ARG   CFLAGS
