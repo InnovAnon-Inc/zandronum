@@ -2,8 +2,13 @@ FROM innovanon/void-base as builder
 
 RUN sleep 91 \
  && xbps-install -Suy
-RUN sleep 91 \
- && xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip
+RUN sleep 91                                                                                 \
+ && for k in $(seq 3) ; do                                                                   \
+      xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip \
+   || continue                                                                               \
+    ; exit 0                                                                                 \
+  ; done                                                                                     \
+ && exit 2
 
 ARG CPPFLAGS
 ARG   CFLAGS
@@ -79,6 +84,7 @@ RUN sleep 91 \
       https://github.com/xz-mirror/xz.git
 RUN cd                           xz     \
  && ./autogen.sh                        \
+ && ./configure --help                  \
  && ./configure --prefix=$PREFIX        \
       --disable-shared --enable-static  \
 	CPPFLAGS="$CPPFLAGS"                 \
@@ -116,6 +122,7 @@ RUN cd libpng                         \
  && ./configure --prefix=$PREFIX      \
       --enable-static                 \
       --disable-shared                \
+      --with-zlib-prefix=$PREFIX      \
 	CPPFLAGS="$CPPFLAGS"                 \
 	CXXFLAGS="$CXXFLAGS"                 \
 	CFLAGS="$CFLAGS"                     \
@@ -135,7 +142,6 @@ RUN cd libpng                         \
         AR="$AR"                             \
         RANLIB="$RANLIB"                     \
         STRIP="$STRIP"                       \
-        LIBS=-lz \
  && make                              \
  && make install                      \
  && git reset --hard                  \
@@ -168,6 +174,7 @@ RUN sleep 91                              \
       https://github.com/SDL-mirror/SDL.git
 RUN cd                            SDL     \
  && ./autogen.sh                          \
+ && ./configure --help                    \
  && ./configure --prefix=$PREFIX          \
       --disable-shared --enable-static    \
 	CPPFLAGS="$CPPFLAGS"                 \
@@ -207,6 +214,7 @@ RUN cd                            deutex     \
  && ./configure --help                       \
  && ./configure --prefix=$PREFIX             \
       --disable-shared --enable-static       \
+      --disable-man                          \
 	CPPFLAGS="$CPPFLAGS"                 \
 	CXXFLAGS="$CXXFLAGS"                 \
 	CFLAGS="$CFLAGS"                     \
