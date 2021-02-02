@@ -1,4 +1,6 @@
-FROM innovanon/void-base-pgo as builder
+#FROM innovanon/void-base as builder
+#FROM innovanon/void-base-pgo as builder
+FROM innovanon/doom-base as builder
 
 #RUN for k in $(seq 3) ; do \
 #      sleep 91             \
