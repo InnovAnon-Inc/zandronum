@@ -197,7 +197,8 @@ RUN cd libjpeg-turbo                     \
 
 RUN for k in $(seq 5) ; do                                               \
       sleep 91                                                           \
- && git clone --depth=1 --recursive       \
+ && GIT_TRACE=true \
+    git clone --depth=1 --recursive       \
       https://github.com/SDL-mirror/SDL.git \
    && break                                                              \
    || (( k != 5 ))                                                       \
