@@ -162,6 +162,7 @@ RUN cd libpng                         \
         LD_RUN_PATH="$LD_RUN_PATH"                    \
         PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
         PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
+        LIBS='-lz' \
  && make                              \
  && make install                      \
  && git reset --hard                  \
