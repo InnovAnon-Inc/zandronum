@@ -1,7 +1,7 @@
 #FROM innovanon/void-base as builder
 #FROM innovanon/void-base-pgo as builder
 FROM innovanon/doom-base as builder
-
+USER root
 #RUN for k in $(seq 3) ; do \
 #      sleep 91             \
 #   && xbps-install -Suy    \
