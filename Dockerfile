@@ -32,16 +32,16 @@ ARG  LDFLAGS
 #ENV AR=$CC-ar
 #ENV RANLIB=$CC-ranlib
 #ENV STRIP=$CHOST-strip
-ENV CHOST=x86_64-unknown-linux-gnu
-ENV CC=$CHOST-gcc
-ENV CXX=$CHOST-g++
-#ENV FC=$CHOST-gfortran
-ENV NM=$CC-nm
-ENV AR=$CC-ar
-ENV RANLIB=$CC-ranlib
-ENV STRIP=$CHOST-strip
-ENV LD=$CHOST-ld
-ENV AS=$CHOST-as
+ENV CHOST=x86_64-linux-gnu
+#ENV CC=$CHOST-gcc
+#ENV CXX=$CHOST-g++
+##ENV FC=$CHOST-gfortran
+#ENV NM=$CC-nm
+#ENV AR=$CC-ar
+#ENV RANLIB=$CC-ranlib
+#ENV STRIP=$CHOST-strip
+#ENV LD=$CHOST-ld
+#ENV AS=$CHOST-as
 
 ENV CPPFLAGS="$CPPFLAGS"
 ENV   CFLAGS="$CFLAGS"
@@ -128,14 +128,6 @@ RUN cd                           xz     \
         LD_RUN_PATH="$LD_RUN_PATH"                    \
         PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
         PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
-        CC="$CC"                             \
-        CXX="$CXX"                           \
-        FC="$FC"                             \
-        NM="$NM"                             \
-        AR="$AR"                             \
-        LD="$LD" AS="$AS" \
-        RANLIB="$RANLIB"                     \
-        STRIP="$STRIP"                       \
  && make                                \
  && make install                        \
  && git reset --hard                    \
@@ -170,14 +162,6 @@ RUN cd libpng                         \
         LD_RUN_PATH="$LD_RUN_PATH"                    \
         PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
         PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
-        CC="$CC"                             \
-        CXX="$CXX"                           \
-        FC="$FC"                             \
-        NM="$NM"                             \
-        AR="$AR"                             \
-        LD="$LD" AS="$AS" \
-        RANLIB="$RANLIB"                     \
-        STRIP="$STRIP"                       \
  && make                              \
  && make install                      \
  && git reset --hard                  \
@@ -235,14 +219,6 @@ RUN cd                            SDL     \
         LD_RUN_PATH="$LD_RUN_PATH"                    \
         PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
         PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
-        CC="$CC"                             \
-        CXX="$CXX"                           \
-        FC="$FC"                             \
-        NM="$NM"                             \
-        AR="$AR"                             \
-        LD="$LD" AS="$AS" \
-        RANLIB="$RANLIB"                     \
-        STRIP="$STRIP"                       \
  && make                                  \
  && make install                          \
  && git reset --hard                      \
@@ -278,14 +254,6 @@ RUN cd                            deutex     \
         LD_RUN_PATH="$LD_RUN_PATH"                    \
         PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
         PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
-        CC="$CC"                             \
-        CXX="$CXX"                           \
-        FC="$FC"                             \
-        NM="$NM"                             \
-        AR="$AR"                             \
-        LD="$LD" AS="$AS" \
-        RANLIB="$RANLIB"                     \
-        STRIP="$STRIP"                       \
         LIBS='-lz -lpng'                     \
  && make                                     \
  && make install                             \
