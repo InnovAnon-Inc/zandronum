@@ -23,7 +23,7 @@ for k in $(seq 7) ; do
   done
   #xbps-install   -y gettext gettext-devel gettext-libs gperf pkg-config po4a texinfo zip \
   #                  python3-pillow-simd gtk+-devel glu-devel glib-devel fluidsynth-devel || continue
-  apt install -y gettext autopoint gperf pkg-config po4a texinfo zip python3-pillow gtk+-dev libglu1-mesa-dev fluidsynth || continue
+  apt install -y gettext autopoint gperf pkg-config po4a texinfo zip python3-pillow gtk+-dev libglu1-mesa-dev libfluidsynth-dev libsdl1.2-dev libsdl-dev mercurial || continue
   FLAG=1
   break
 done

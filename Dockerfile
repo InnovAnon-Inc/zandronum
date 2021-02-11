@@ -229,77 +229,79 @@ RUN cd                            SDL     \
  && cd ..                                 \
  && ldconfig
 
-RUN for k in $(seq 5) ; do                                               \
-      sleep 91                                                           \
- && git clone --depth=1 --recursive          \
-      https://github.com/Doom-Utils/deutex.git \
-   && break                                                              \
-   || (( k != 5 ))                                                       \
-  ; done
-# TODO
-RUN cd                            deutex     \ 
- && chmod -v +x bootstrap                    \
- && ./bootstrap                              \
- && ./configure --help                       \
- && ./configure --prefix=$PREFIX             \
-      --disable-shared --enable-static       \
-      --disable-man                          \
-	CPPFLAGS="$CPPFLAGS"                 \
-	CXXFLAGS="$CXXFLAGS"                 \
-	CFLAGS="$CFLAGS"                     \
-	LDFLAGS="$LDFLAGS"                   \
-        CPATH="$CPATH"                                \
-        C_INCLUDE_PATH="$C_INCLUDE_PATH"              \
-        OBJC_INCLUDE_PATH="$OBJC_INCLUDE_PATH"        \
-        LIBRARY_PATH="$LIBRARY_PATH"                  \
-        LD_LIBRARY_PATH="$LD_LIBRARY_PATH"            \
-        LD_RUN_PATH="$LD_RUN_PATH"                    \
-        PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
-        PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
-        LIBS='-lz -lpng'                     \
- && make                                     \
- && make install                             \
- && git reset --hard                         \
- && git clean -fdx                           \
- && git clean -fdx                           \
- && cd ..                                    \
- && ldconfig
+#RUN for k in $(seq 5) ; do                                               \
+#      sleep 91                                                           \
+# && git clone --depth=1 --recursive          \
+#      https://github.com/Doom-Utils/deutex.git \
+#   && break                                                              \
+#   || (( k != 5 ))                                                       \
+#  ; done
+## TODO
+#RUN cd                            deutex     \ 
+# && chmod -v +x bootstrap                    \
+# && ./bootstrap                              \
+# && ./configure --help                       \
+# && ./configure --prefix=$PREFIX             \
+#      --disable-shared --enable-static       \
+#      --disable-man                          \
+#	CPPFLAGS="$CPPFLAGS"                 \
+#	CXXFLAGS="$CXXFLAGS"                 \
+#	CFLAGS="$CFLAGS"                     \
+#	LDFLAGS="$LDFLAGS"                   \
+#        CPATH="$CPATH"                                \
+#        C_INCLUDE_PATH="$C_INCLUDE_PATH"              \
+#        OBJC_INCLUDE_PATH="$OBJC_INCLUDE_PATH"        \
+#        LIBRARY_PATH="$LIBRARY_PATH"                  \
+#        LD_LIBRARY_PATH="$LD_LIBRARY_PATH"            \
+#        LD_RUN_PATH="$LD_RUN_PATH"                    \
+#        PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR"        \
+#        PKG_CONFIG_PATH="$PKG_CONFIG_PATH"            \
+#        LIBS='-lpng -lz -lm'                 \
+# && make                                     \
+# && make install                             \
+# && git reset --hard                         \
+# && git clean -fdx                           \
+# && git clean -fdx                           \
+# && cd ..                                    \
+# && ldconfig
+#
+#RUN for k in $(seq 5) ; do                                               \
+#      sleep 91                                                           \
+# && git clone --depth=1 --recursive           \
+#      https://github.com/Doom-Utils/zennode.git \
+#   && break                                                              \
+#   || (( k != 5 ))                                                       \
+#  ; done
+#RUN cd                            zennode     \
+# && sed -i                                    \
+# -e 's/^DOCS=.*/DOCS=/'                       \
+# -e '/	install -Dm 644 $(DOCS)/d'            \
+# -e '/	for doc in $(DOCS)/d'                 \
+# Makefile                                     \
+# && make                                      \
+# && make PREFIX=$PREFIX install               \
+# && git reset --hard                          \
+# && git clean -fdx                            \
+# && git clean -fdx                            \
+# && cd ..                                     \
+# && ldconfig
+#
+#RUN for k in $(seq 5) ; do                                               \
+#      sleep 91                                                           \
+# && git clone --depth=1 --recursive           \
+#      https://github.com/freedoom/freedoom.git \
+#   && break                                                              \
+#   || (( k != 5 ))                                                       \
+#  ; done
+#RUN cd                          freedoom      \
+# && make                                      \
+# && install -vD wads/* -t /var/games/doom     \
+# && git reset --hard                          \
+# && git clean -fdx                            \
+# && git clean -fdx                            \
+# && cd ..
 
-RUN for k in $(seq 5) ; do                                               \
-      sleep 91                                                           \
- && git clone --depth=1 --recursive           \
-      https://github.com/Doom-Utils/zennode.git \
-   && break                                                              \
-   || (( k != 5 ))                                                       \
-  ; done
-RUN cd                            zennode     \
- && sed -i                                    \
- -e 's/^DOCS=.*/DOCS=/'                       \
- -e '/	install -Dm 644 $(DOCS)/d'            \
- -e '/	for doc in $(DOCS)/d'                 \
- Makefile                                     \
- && make                                      \
- && make PREFIX=$PREFIX install               \
- && git reset --hard                          \
- && git clean -fdx                            \
- && git clean -fdx                            \
- && cd ..                                     \
- && ldconfig
-
-RUN for k in $(seq 5) ; do                                               \
-      sleep 91                                                           \
- && git clone --depth=1 --recursive           \
-      https://github.com/freedoom/freedoom.git \
-   && break                                                              \
-   || (( k != 5 ))                                                       \
-  ; done
-RUN cd                          freedoom      \
- && make                                      \
- && install -vD wads/* -t /var/games/doom     \
- && git reset --hard                          \
- && git clean -fdx                            \
- && git clean -fdx                            \
- && cd ..
+COPY --from=innovanon/freedoom /var/games/doom/ /var/games/doom
 
 RUN for k in $(seq 5) ; do                                               \
       sleep 91                                                           \
@@ -393,17 +395,25 @@ RUN cd                           openssl              \
  && cd .. \
  && ldconfig
 
+WORKDIR /tmp/
 COPY ./fmodstudioapi20107linux.tar.gz /tmp/
+#RUN mkdir -v /tmp/fmodstudioapi20107linux/                          \
+# && cd       /tmp/fmodstudioapi20107linux                           \
+           #/tmp/fmodstudioapi20107linux/api/lowlevel/lib/$(uname -m)/*so \
+           #/tmp/fmodstudioapi20107linux/api/lowlevel/inc/*.h        \
 RUN tar xf /tmp/fmodstudioapi20107linux.tar.gz                      \
- && cp -v  /tmp/fmodstudioapi20107linux/api/fsbank/lib/x86_64/*so   \
-           /tmp/fmodstudioapi20107linux/api/lowlevel/lib/x86_64/*so \
-           /tmp/fmodstudioapi20107linux/api/studio/lib/x86_64/*so   $PREFIX/lib/ \
+ && cp -v  /tmp/fmodstudioapi20107linux/api/fsbank/lib/$(uname -m)/*so   \
+           /tmp/fmodstudioapi20107linux/api/core/lib/$(uname -m)/*so \
+           /tmp/fmodstudioapi20107linux/api/studio/lib/$(uname -m)/*so   $PREFIX/lib/ \
  && cp -v  /tmp/fmodstudioapi20107linux/api/fsbank/inc/*.h          \
-           /tmp/fmodstudioapi20107linux/api/lowlevel/inc/*.h        \
+           /tmp/fmodstudioapi20107linux/api/core/inc/*.h        \
            /tmp/fmodstudioapi20107linux/api/studio/inc/*.h          $PREFIX/include/ \
  && rm -rf /tmp/fmodstudioapi20107linux                             \
  && rm -v  /tmp/fmodstudioapi20107linux.tar.gz                      \
  && ldconfig
+
+RUN find /usr/lib     -iname '*sdl*'
+RUN find /usr/include -iname '*sdl*'
 
 RUN for k in $(seq 5) ; do                                               \
       sleep 91                                                           \
@@ -413,6 +423,7 @@ RUN for k in $(seq 5) ; do                                               \
    || (( k != 5 ))                                                       \
   ; done
 RUN cd                          zandronum     \
+ && grep FMOD src/CMakeLists.txt \
  && mkdir -v build                            \
  && cd       build                            \
  && cmake                                     \
@@ -421,8 +432,10 @@ RUN cd                          zandronum     \
       -DCMAKE_CXX_FLAGS="$CXXFLAGS"      \
       -DCMAKE_FIND_ROOT_PATH=$PREFIX     \
       -DCMAKE_INSTALL_PREFIX=$PREFIX     \
-      -DSDL_LIBRARY=$PREFIX                   \
-      -DSDL_INCLUDE_DIR=$PREFIX/include       \
+      -DSDL_LIBRARY=/usr/lib/$(uname -m)-linux-gnu/libSDL.a                   \
+      -DSDL_INCLUDE_DIR=/usr/include/SDL       \
+      -DFMOD_INCLUDE_DIR=/tmp/fmodstudioapi20107linux/core/inc \
+      -DFMOD_LIBRARY=/tmp/fmodstudioapi20107linux/core/lib/$(uname -m)/*.so \
       ..                                      \
  && make                                      \
  && make install                              \
@@ -434,17 +447,17 @@ RUN cd                          zandronum     \
  && command -v zandronum                      \
  && ldd $(command -v zandronum)
 
-COPY    ./rainbow_blood.zip ./
-RUN unzip        rainbow_blood.zip   \
- && mkdir -v     rainbow_blood       \
- && cd           rainbow_blood       \
- && unzip -o '../rainbow blood.pk3'  \
- && rm -v     ../rainbow_blood.zip   \
-             '../rainbow blood.pk3'  \
- && zip -q -Z bzip2 -9               \
-         -r /var/games/doom/rainbow_blood.pk3 . \
- && cd      /tmp                     \
- && rm -rf                  ./rainbow_blood
+#COPY    ./rainbow_blood.zip ./
+#RUN unzip        rainbow_blood.zip   \
+# && mkdir -v     rainbow_blood       \
+# && cd           rainbow_blood       \
+# && unzip -o '../rainbow blood.pk3'  \
+# && rm -v     ../rainbow_blood.zip   \
+#             '../rainbow blood.pk3'  \
+# && zip -q -Z bzip2 -9               \
+#         -r /var/games/doom/rainbow_blood.pk3 . \
+# && cd      /tmp                     \
+# && rm -rf                  ./rainbow_blood
 
 # TODO
 # && useradd -ms /bin/bash zandronum
