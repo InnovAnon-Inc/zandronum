@@ -49,6 +49,16 @@ jobs:
               docker push innovanon/zandronum
             fi
       - run:
+          name: Push upstream (zserver)
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              sleep 333
+              curl --location --request POST \
+                'https://circleci.com/api/v2/project/github/InnovAnon-Inc/zserver/pipeline' \
+                --header 'Content-Type: application/json' \
+                -u "${API_TOKEN}:"
+            fi
+      - run:
           name: Push upstream (zclient)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
